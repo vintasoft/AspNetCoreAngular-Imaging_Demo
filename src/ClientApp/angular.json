@@ -146,5 +146,8 @@
       }
     }
   },
-  "defaultProject": "AspNetCoreAngularImagingDemo"
+  "defaultProject": "AspNetCoreAngularImagingDemo",
+  "cli": {
+    "analytics": false
+  }
 }

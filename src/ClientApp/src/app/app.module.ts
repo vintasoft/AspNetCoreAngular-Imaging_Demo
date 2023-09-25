@@ -9,7 +9,6 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AppComponent } from './app.component';
 import { ImagingDemoComponent } from './imaging-demo/imaging-demo';
 
-import { ImageViewerSettingsDialog, ImageViewerSettingsDialogContent } from './dialogs/image-viewer-settings-dialog';
 import { ErrorMessageDialogContent, ErrorMessageDialog } from './dialogs/error-message-dialog';
 import { ImageProcessingCommandSettingsDialog, ImageProcessingCommandSettingsDialogContent } from './dialogs/image-processing-command-settings-dialog';
 import { ImageProcessingCommandResultDialog, ImageProcessingCommandResultDialogContent } from './dialogs/image-processing-command-result-dialog';
@@ -19,8 +18,6 @@ import { BlockUiDialog, BlockUiDialogContent } from './dialogs/block-ui-dialog';
   declarations: [
     AppComponent,
     ImagingDemoComponent,
-    ImageViewerSettingsDialog,
-    ImageViewerSettingsDialogContent,
     ErrorMessageDialogContent,
     ErrorMessageDialog,
     ImageProcessingCommandSettingsDialog,
@@ -31,8 +28,6 @@ import { BlockUiDialog, BlockUiDialogContent } from './dialogs/block-ui-dialog';
     BlockUiDialogContent
   ],
   entryComponents: [
-    ImageViewerSettingsDialog,
-    ImageViewerSettingsDialogContent,
     ErrorMessageDialogContent,
     ErrorMessageDialog,
     ImageProcessingCommandSettingsDialog,
