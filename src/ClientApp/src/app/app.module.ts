@@ -10,8 +10,6 @@ import { AppComponent } from './app.component';
 import { ImagingDemoComponent } from './imaging-demo/imaging-demo';
 
 import { ErrorMessageDialogContent, ErrorMessageDialog } from './dialogs/error-message-dialog';
-import { ImageProcessingCommandSettingsDialog, ImageProcessingCommandSettingsDialogContent } from './dialogs/image-processing-command-settings-dialog';
-import { ImageProcessingCommandResultDialog, ImageProcessingCommandResultDialogContent } from './dialogs/image-processing-command-result-dialog';
 import { BlockUiDialog, BlockUiDialogContent } from './dialogs/block-ui-dialog';
 
 @NgModule({
@@ -20,20 +18,12 @@ import { BlockUiDialog, BlockUiDialogContent } from './dialogs/block-ui-dialog';
     ImagingDemoComponent,
     ErrorMessageDialogContent,
     ErrorMessageDialog,
-    ImageProcessingCommandSettingsDialog,
-    ImageProcessingCommandSettingsDialogContent,
-    ImageProcessingCommandResultDialog,
-    ImageProcessingCommandResultDialogContent,
     BlockUiDialog,
     BlockUiDialogContent
   ],
   entryComponents: [
     ErrorMessageDialogContent,
     ErrorMessageDialog,
-    ImageProcessingCommandSettingsDialog,
-    ImageProcessingCommandSettingsDialogContent,
-    ImageProcessingCommandResultDialog,
-    ImageProcessingCommandResultDialogContent,
     BlockUiDialog,
     BlockUiDialogContent
   ],

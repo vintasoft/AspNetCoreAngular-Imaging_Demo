@@ -1,3 +1,10 @@
+﻿// Copyright 2014-2023 VintaSoft Ltd. All rights reserved.
+// This software is protected by International copyright laws.
+// Any copying, duplication, deployment, redistribution, modification or other
+// disposition hereof is STRICTLY PROHIBITED without an express written license
+// granted by VintaSoft Ltd. This notice may not be removed or otherwise
+// altered under any circumstances.
+// This code may NOT be used apart of the VintaSoft product.
 ﻿// NAMESPACE
 declare module Vintasoft.Imaging.ImageProcessing.DocCleanup {
 
@@ -2354,6 +2361,27 @@ declare module Vintasoft.Imaging.ImageProcessing.DocCleanup {
      * @param image Image that should be processed.
      */
     checkCommandParams(image: Vintasoft.Shared.WebImageJS): boolean;
+
+  }
+
+  /**
+   * Corrects perspective distortion of the document image.
+   */
+  class WebDocumentPerspectiveCorrectionCommandJS extends Vintasoft.Imaging.ImageProcessing.DocCleanup.WebDocumentImageProcessingCommandWithSourceChangeJS {
+
+    // CONTSRUCTORS
+
+    /**
+     * Initializes a new instance of the [see= "WebDocumentPerspectiveCorrectionCommandJS"] class.
+     */
+    constructor();
+
+    // PROPERTIES
+
+    /**
+     * Gets action name.
+     */
+    get_ActionName(): string;
 
   }
 

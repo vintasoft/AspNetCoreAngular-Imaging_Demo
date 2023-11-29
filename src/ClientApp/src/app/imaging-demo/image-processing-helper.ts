@@ -1,6 +1,4 @@
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { ImageProcessingCommandSettingsDialog } from '../dialogs/image-processing-command-settings-dialog';
-import { ImageProcessingCommandResultDialog } from '../dialogs/image-processing-command-result-dialog';
 
 let _imageProcessingHelper: ImageProcessingHelper;
 
@@ -13,6 +11,7 @@ export class ImageProcessingHelper {
 
   // A value indicating whether visual tool selection is used.
   _isVisualToolSelectionUsed = false;
+  _imageProcessingCommandSettingsDialog: Vintasoft.Imaging.DocumentViewer.Dialogs.WebUiPropertyGridDialogJS | null = null;
 
 
 
@@ -58,9 +57,30 @@ export class ImageProcessingHelper {
         }
       }
 
-      let dlg: ImageProcessingCommandSettingsDialog = new ImageProcessingCommandSettingsDialog(_imageProcessingHelper.modalService);
-      dlg.imageProcessingCommand = command;
-      dlg.open();
+      // if previous image processing dialog exists
+      if (this._imageProcessingCommandSettingsDialog != null) {
+        // remove dialog from web document viewer
+        docViewer.get_Items().removeItem(this._imageProcessingCommandSettingsDialog);
+        // clear link to dialog
+        this._imageProcessingCommandSettingsDialog = null;
+      }
+
+      // create the property grid for image processing command
+      var propertyGrid = new Vintasoft.Shared.WebPropertyGridJS(command);
+
+      // create the image processing dialog
+      this._imageProcessingCommandSettingsDialog = new Vintasoft.Imaging.DocumentViewer.Dialogs.WebUiPropertyGridDialogJS(
+        propertyGrid,
+        {
+          title: "Image processing command settings",
+          cssClass: "vsui-dialog imageProcessingSettings",
+          localizationId: "imageProcessingSettingsDialog"
+        });
+      // add dialog to the web document viewer
+      docViewer.get_Items().addItem(this._imageProcessingCommandSettingsDialog);
+
+      // show the dialog
+      this._imageProcessingCommandSettingsDialog.show();
     }
   }
 
@@ -144,10 +164,19 @@ export class ImageProcessingHelper {
     delete imageProcessingResult.guid;
     delete imageProcessingResult.sourceImage;
 
+    let propertGrid: Vintasoft.Shared.WebPropertyGridJS = new Vintasoft.Shared.WebPropertyGridJS(imageProcessingResult);
+
     // create dialog that displays image processing result
-    let dlg: ImageProcessingCommandResultDialog = new ImageProcessingCommandResultDialog(_imageProcessingHelper.modalService);
-    dlg.imageProcessingCommandResult = imageProcessingResult;
-    dlg.open();
+    let dlg: Vintasoft.Imaging.DocumentViewer.Dialogs.WebUiPropertyGridDialogJS =
+      new Vintasoft.Imaging.DocumentViewer.Dialogs.WebUiPropertyGridDialogJS(
+        propertGrid,
+        {
+          title: "Image processing result",
+          cssClass: "vsui-dialog imageProcessingResult",
+          localizationId: "imageProcessingResultDialog"
+        });
+    docViewer.get_Items().addItem(dlg);
+    dlg.show();
 
     // get regions, which must be highlighted in image viewer
     let highlightRegions: any = _imageProcessingHelper.__getHighlightRegionsFromImageProcessingResult(imageProcessingResult);

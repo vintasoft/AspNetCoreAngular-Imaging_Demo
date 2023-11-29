@@ -4,7 +4,6 @@ import { HttpClient } from '@angular/common/http';
 import { ErrorMessageDialog } from "../dialogs/error-message-dialog";
 import { BlockUiDialog } from '../dialogs/block-ui-dialog';
 import { OpenFileHelper } from './open-file-helper';
-import { CustomRotationInImageViewerHelper } from './custom-rotation-in-image-viewer-helper';
 import { ImageProcessingHelper } from './image-processing-helper';
 
 
@@ -50,11 +49,13 @@ export class ImagingDemoComponent {
       Vintasoft.Shared.WebServiceJS.defaultImageProcessingService = new Vintasoft.Shared.WebServiceControllerJS("vintasoft/api/MyVintasoftImageProcessingApi");
       Vintasoft.Shared.WebServiceJS.defaultImageProcessingDocCleanupService = new Vintasoft.Shared.WebServiceControllerJS("vintasoft/api/MyVintasoftImageProcessingDocCleanupApi");
 
-      // register new UI elements
-      this.__registerNewUiElements();
-
       // create the document viewer settings
       let docViewerSettings: Vintasoft.Imaging.DocumentViewer.WebDocumentViewerSettingsJS = new Vintasoft.Imaging.DocumentViewer.WebDocumentViewerSettingsJS("documentViewerContainer", "documentViewer");
+      // enable image uploading from URL
+      docViewerSettings.set_CanUploadImageFromUrl(true);
+      // specify that document viewer should show "Export and download file" button instead of "Download file" button
+      docViewerSettings.set_CanExportAndDownloadFile(true);
+      docViewerSettings.set_CanDownloadFile(false);
 
       // initialize main menu of document viewer
       this.__initMenu(docViewerSettings);
@@ -77,8 +78,21 @@ export class ImagingDemoComponent {
       // subscribe to the asyncOperationFailed event of document viewer
       Vintasoft.Shared.subscribeToEvent(this._docViewer, "asyncOperationFailed", this.__docViewer_asyncOperationFailed);
 
-      // initialize visual tools
-      this.__initializeVisualTools(this._docViewer);
+      // subscribe to the thumbnailsDeleting event of document viewer
+      Vintasoft.Shared.subscribeToEvent(this._docViewer, "thumbnailsDeleting", this.__docViewer_thumbnailsDeleting);
+
+      // get the thumbnail viewer of document viewer
+      let thumbnailViewer1: Vintasoft.Imaging.UI.WebThumbnailViewerJS = this._docViewer.get_ThumbnailViewer();
+      thumbnailViewer1.set_CanDragThumbnails(true);
+      thumbnailViewer1.set_CanNavigateThumbnailsUsingKeyboard(true);
+      thumbnailViewer1.set_CanSelectThumbnailsUsingKeyboard(true);
+      thumbnailViewer1.set_CanDeleteThumbnailsUsingKeyboard(true);
+
+      // get the thumbnail viewer panel
+      let thumbnailViewerPanel: Vintasoft.Imaging.DocumentViewer.Panels.WebUiThumbnailViewerPanelJS
+        = this._docViewer.get_Items().getItemByRegisteredId("thumbnailViewerPanel") as Vintasoft.Imaging.DocumentViewer.Panels.WebUiThumbnailViewerPanelJS;
+      // specify that thumbnail viewer should have context menu that allows to delete thumbnails
+      thumbnailViewerPanel.set_CanDeleteThumbnailsUsingContextMenu(true);
 
       // get the image viewer of document viewer
       let imageViewer1: Vintasoft.Imaging.UI.WebImageViewerJS = this._docViewer.get_ImageViewer();
@@ -86,6 +100,7 @@ export class ImagingDemoComponent {
       imageViewer1.set_DisplayMode(new Vintasoft.Imaging.WebImageViewerDisplayModeEnumJS("SingleContinuousColumn"));
       // specify that image viewer must show images in the fit width mode
       imageViewer1.set_ImageSizeMode(new Vintasoft.Imaging.WebImageSizeModeEnumJS("FitToWidth"));
+
       // create the progress image
       let progressImage = new Image();
       progressImage.src = "Images/fileUploadProgress.gif";
@@ -109,12 +124,6 @@ export class ImagingDemoComponent {
 
 
   // === Init UI ===
-
-  /**
-   * Registers custom UI elements in "WebUiElementsFactoryJS".
-   */
-  __registerNewUiElements() {
-  }
 
   /**
    * Initializes main menu of document viewer.
@@ -172,9 +181,8 @@ export class ImagingDemoComponent {
       items.getItemByRegisteredId("imageViewerPanel") as Vintasoft.Imaging.DocumentViewer.Panels.WebUiImageViewerPanelJS;
     // if panel exists
     if (imageViewerPanel != null) {
-      let customRotationInImageViewerHelper: CustomRotationInImageViewerHelper = new CustomRotationInImageViewerHelper();
-      // add "Custom image rotation" menu to the context menu of image viewer
-      customRotationInImageViewerHelper.addCustomImageRotationMenuToImageViewerContextMenu(imageViewerPanel);
+      // enable ability to set custom image rotation
+      imageViewerPanel.set_CanSetCustomViewRotationUsingContextMenu(true);
     }
   }
 
@@ -220,33 +228,6 @@ export class ImagingDemoComponent {
       // clear visual tool in image viewer
       _imagingDemoComponent._docViewer.clearCurrentVisualTool();
     }
-  }
-
-
-
-  // === Visual Tools ===
-
-  /**
-   * Initializes visual tools.
-   * @param docViewer The document viewer.
-   */
-  __initializeVisualTools(docViewer: Vintasoft.Imaging.DocumentViewer.WebDocumentViewerJS) {
-    let panTool: Vintasoft.Imaging.UI.VisualTools.WebPanToolJS = docViewer.getVisualToolById("PanTool");
-    let panCursor = "url('Content/Cursors/CloseHand.cur'), auto";
-    panTool.set_Cursor("pointer");
-    panTool.set_ActionCursor(panCursor);
-
-    let magnifierTool: Vintasoft.Imaging.UI.VisualTools.WebMagnifierToolJS = docViewer.getVisualToolById("MagnifierTool") as Vintasoft.Imaging.UI.VisualTools.WebMagnifierToolJS;
-    let magnifierCursor = "url('Content/Cursors/Magnifier.cur'), auto";
-    magnifierTool.set_Cursor(magnifierCursor);
-
-    let zoomTool: Vintasoft.Imaging.UI.VisualTools.WebZoomToolJS = docViewer.getVisualToolById("ZoomTool") as Vintasoft.Imaging.UI.VisualTools.WebZoomToolJS;
-    let zoomCursor = "url('Content/Cursors/Zoom.cur'), auto";
-    zoomTool.set_Cursor(zoomCursor);
-    zoomTool.set_ActionCursor(zoomCursor);
-
-    let zoomSelectionTool: Vintasoft.Imaging.UI.VisualTools.WebZoomSelectionToolJS = docViewer.getVisualToolById("ZoomSelectionTool") as Vintasoft.Imaging.UI.VisualTools.WebZoomSelectionToolJS;
-    zoomSelectionTool.set_ActionCursor(zoomCursor);
   }
 
 
@@ -313,6 +294,24 @@ export class ImagingDemoComponent {
     else {
       // show error message
       _imagingDemoComponent.__showErrorMessage(description + ": unknown error.");
+    }
+  }
+
+  __docViewer_thumbnailsDeleting(event: any, eventArgs: any) {
+    if (_imagingDemoComponent._docViewer == null)
+      return;
+
+    // reset the active visual tool in image viewer
+    _imagingDemoComponent._docViewer.get_ImageViewer().get_VisualTool().reset();
+
+    var message;
+    if (eventArgs.indexes.length == 1)
+      message = "Do you want to remove thumbnail?";
+    else
+      message = "Do you want to remove thumbnails?";
+
+    if (!confirm(message)) {
+      eventArgs.cancel = true;
     }
   }
 
