@@ -11,7 +11,7 @@ export class ImageProcessingHelper {
 
   // A value indicating whether visual tool selection is used.
   _isVisualToolSelectionUsed = false;
-  _imageProcessingCommandSettingsDialog: Vintasoft.Imaging.DocumentViewer.Dialogs.WebUiPropertyGridDialogJS | null = null;
+  _imageProcessingCommandSettingsDialog: Vintasoft.Imaging.UI.Dialogs.WebUiPropertyGridDialogJS | null = null;
 
 
 
@@ -69,7 +69,7 @@ export class ImageProcessingHelper {
       var propertyGrid = new Vintasoft.Shared.WebPropertyGridJS(command);
 
       // create the image processing dialog
-      this._imageProcessingCommandSettingsDialog = new Vintasoft.Imaging.DocumentViewer.Dialogs.WebUiPropertyGridDialogJS(
+      this._imageProcessingCommandSettingsDialog = new Vintasoft.Imaging.UI.Dialogs.WebUiPropertyGridDialogJS(
         propertyGrid,
         {
           title: "Image processing command settings",
@@ -167,8 +167,8 @@ export class ImageProcessingHelper {
     let propertGrid: Vintasoft.Shared.WebPropertyGridJS = new Vintasoft.Shared.WebPropertyGridJS(imageProcessingResult);
 
     // create dialog that displays image processing result
-    let dlg: Vintasoft.Imaging.DocumentViewer.Dialogs.WebUiPropertyGridDialogJS =
-      new Vintasoft.Imaging.DocumentViewer.Dialogs.WebUiPropertyGridDialogJS(
+    let dlg: Vintasoft.Imaging.UI.Dialogs.WebUiPropertyGridDialogJS =
+      new Vintasoft.Imaging.UI.Dialogs.WebUiPropertyGridDialogJS(
         propertGrid,
         {
           title: "Image processing result",
