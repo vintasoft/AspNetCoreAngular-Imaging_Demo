@@ -9,13 +9,14 @@
 		<SpaProxyLaunchCommand>npm start</SpaProxyLaunchCommand>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<EnableDefaultItems>false</EnableDefaultItems>
-		<Version>12.3.11.1</Version>
+		<Version>12.4.0.1</Version>
 	</PropertyGroup>
 
 	<ItemGroup>
 		<!-- Don't publish the SPA source files, but do show them in the project files list -->
 		<Content Remove="$(SpaRoot)**" />
 		<None Remove="$(SpaRoot)**" />
+		<None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
 	</ItemGroup>
 
 	<Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
@@ -52,42 +53,43 @@
 
 	<ItemGroup>
     <PackageReference Include="Vintasoft.Shared" Version="4.1.3.1" />
-    <PackageReference Include="Vintasoft.Imaging" Version="12.3.11.1" />
-    <PackageReference Include="Vintasoft.Imaging.Drawing.SkiaSharp" Version="12.3.11.1" />
-    <PackageReference Include="Vintasoft.Imaging.Dicom" Version="5.3.11.1" />
-    <PackageReference Include="Vintasoft.Imaging.DocCleanup" Version="7.3.11.1" />
-    <PackageReference Include="Vintasoft.Imaging.Jbig2Codec" Version="9.3.11.1" />
-    <PackageReference Include="Vintasoft.Imaging.Jpeg2000Codec" Version="8.3.11.1" />
-    <PackageReference Include="Vintasoft.Imaging.Pdf" Version="9.3.11.1" />
-    <PackageReference Include="Vintasoft.Imaging.RawCodec" Version="12.3.11.1" />
-    <PackageReference Include="Vintasoft.Imaging.WebpCodec" Version="12.3.11.1" />
+    <PackageReference Include="Vintasoft.Imaging" Version="12.4.0.1" />
+    <PackageReference Include="Vintasoft.Imaging.Drawing.SkiaSharp" Version="12.4.0.1" />
+    <PackageReference Include="Vintasoft.Imaging.Dicom" Version="5.4.0.1" />
+    <PackageReference Include="Vintasoft.Imaging.DocCleanup" Version="7.4.0.1" />
+    <PackageReference Include="Vintasoft.Imaging.Jbig2Codec" Version="9.4.0.1" />
+    <PackageReference Include="Vintasoft.Imaging.Jpeg2000Codec" Version="8.4.0.1" />
+    <PackageReference Include="Vintasoft.Imaging.Pdf" Version="9.4.0.1" />
+    <PackageReference Include="Vintasoft.Imaging.RawCodec" Version="12.4.0.1" />
+    <PackageReference Include="Vintasoft.Imaging.WebpCodec" Version="12.4.0.1" />
     <PackageReference Include="Vintasoft.Shared.Web" Version="4.1.3.1" />
-    <PackageReference Include="Vintasoft.Imaging.Web.Services" Version="12.3.11.1" />
-    <PackageReference Include="Vintasoft.Imaging.AspNetCore.ApiControllers" Version="12.3.11.1" />
-    <PackageReference Include="Vintasoft.Imaging.DocCleanup.Web.Services" Version="7.3.11.1" />
-    <PackageReference Include="Vintasoft.Imaging.DocCleanup.AspNetCore.ApiControllers" Version="7.3.11.1" />
+    <PackageReference Include="Vintasoft.Imaging.Web.Services" Version="12.4.0.1" />
+    <PackageReference Include="Vintasoft.Imaging.AspNetCore.ApiControllers" Version="12.4.0.1" />
+    <PackageReference Include="Vintasoft.Imaging.DocCleanup.Web.Services" Version="7.4.0.1" />
+    <PackageReference Include="Vintasoft.Imaging.DocCleanup.AspNetCore.ApiControllers" Version="7.4.0.1" />
 	</ItemGroup>
-<ItemGroup>
-  <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
-  <Compile Include="Controllers\File\MyVintasoftFileApiController.cs" />
-  <Compile Include="Controllers\File\UploadedFilesListResponseParams.cs" />
-  <Compile Include="Controllers\ImageCollection\MyVintasoftImageCollectionApiController.cs" />
-  <Compile Include="Controllers\ImageProcessing\MyVintasoftImageProcessingApiController.cs" />
-  <Compile Include="Controllers\ImageProcessing\MyVintasoftImageProcessingDocCleanupApiController.cs" />
-  <Compile Include="Controllers\ImageRendering\MyVintasoftImageApiController.cs" />
-  <Compile Include="Controllers\SessionController.cs" />
-  <Compile Include="CustomFontProgramsController.cs" />
-  <Compile Include="Program.cs" />
-  <Content Include="appsettings.Development.json" />
-  <Content Include="appsettings.json" />
-  <Content Include="Properties\launchSettings.json" />
-  <Content Include="wwwroot\favicon.ico" />
-  <Content Include="wwwroot\Images\fileUploadProgress.gif" />
-  <Content Include="wwwroot\Images\VintaSoftLogo.png" />
-  <None Include=".gitignore" />
-  <None Include="wwwroot\Resources\DefaultCMYK.icc" />
-  <None Include="wwwroot\Resources\DefaultRGB.icc" />
-  <None Include="wwwroot\UploadedImageFiles\VintasoftImagingDemo.pdf" />
-  <Folder Include="wwwroot\VintasoftCache\" />
-</ItemGroup>
+
+	<ItemGroup>
+	  <Compile Include="Controllers\File\MyVintasoftFileApiController.cs" />
+	  <Compile Include="Controllers\File\UploadedFilesListResponseParams.cs" />
+	  <Compile Include="Controllers\ImageCollection\MyVintasoftImageCollectionApiController.cs" />
+	  <Compile Include="Controllers\ImageProcessing\MyVintasoftImageProcessingApiController.cs" />
+	  <Compile Include="Controllers\ImageProcessing\MyVintasoftImageProcessingDocCleanupApiController.cs" />
+	  <Compile Include="Controllers\ImageRendering\MyVintasoftImageApiController.cs" />
+	  <Compile Include="Controllers\SessionController.cs" />
+	  <Compile Include="CustomFontProgramsController.cs" />
+	  <Compile Include="Program.cs" />
+	  <Content Include="appsettings.Development.json" />
+	  <Content Include="appsettings.json" />
+	  <Content Include="Properties\launchSettings.json" />
+	  <Content Include="wwwroot\favicon.ico" />
+	  <Content Include="wwwroot\Images\fileUploadProgress.gif" />
+	  <Content Include="wwwroot\Images\VintaSoftLogo.png" />
+	  <None Include=".gitignore" />
+	  <None Include="wwwroot\Resources\DefaultCMYK.icc" />
+	  <None Include="wwwroot\Resources\DefaultRGB.icc" />
+	  <None Include="wwwroot\UploadedImageFiles\VintasoftImagingDemo.pdf" />
+	  <Folder Include="wwwroot\VintasoftCache\" />
+	</ItemGroup>
+
 </Project>
