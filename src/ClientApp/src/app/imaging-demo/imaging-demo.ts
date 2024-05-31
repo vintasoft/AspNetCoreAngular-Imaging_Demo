@@ -138,6 +138,14 @@ export class ImagingDemoComponent {
     let uploadFileButton: Vintasoft.Imaging.UI.UIElements.WebUiUploadFileButtonJS = items.getItemByRegisteredId("uploadFileButton") as Vintasoft.Imaging.UI.UIElements.WebUiUploadFileButtonJS;
     if (uploadFileButton != null)
       uploadFileButton.set_FileExtensionFilter(".bmp, .emf, .gif, .ico, .cur, .jpg, .jpeg, .jls, .pcx, .png, .tif, .tiff, .wmf, .jb2, .jbig2, .jp2, .j2k, .j2c, .jpc, .cr2, .crw, .nef, .nrw, .dng, .dcm, .dic, .acr, .pdf");
+
+    // get the "File" menu panel
+    let fileSubmenu: Vintasoft.Imaging.DocumentViewer.Panels.WebUiVisualToolsToolbarPanelJS = items.getItemByRegisteredId("fileToolbarPanel") as Vintasoft.Imaging.DocumentViewer.Panels.WebUiVisualToolsToolbarPanelJS;
+    // if menu panel is found
+    if (fileSubmenu != null) {
+      let fileSubmenuItems: Vintasoft.Imaging.UI.UIElements.WebUiElementCollectionJS = fileSubmenu.get_Items();
+      fileSubmenuItems.insertItem(3, "documentLayoutSettingsButton");
+    }
   }
 
   /**
