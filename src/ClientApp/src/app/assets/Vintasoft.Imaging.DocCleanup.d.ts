@@ -749,7 +749,7 @@ declare module Vintasoft.Imaging.ImageProcessing.DocCleanup {
   }
 
   /**
-   * Detects and removes borders around an image.
+   * Removes (fills) lines on document image automatically (lines of forms, tables, underlining/strikethrough of text, noise).
    */
   class WebLineRemovalCommandJS extends Vintasoft.Imaging.ImageProcessing.DocCleanup.WebDocumentImageProcessingCommandWithRegionAndSourceChangeJS {
 
@@ -942,6 +942,45 @@ declare module Vintasoft.Imaging.ImageProcessing.DocCleanup {
      * @param value True - removal process reconnects objects, otherwise, False. Default value is True.
      */
     set_ReconnectBrokenObjects(value: boolean): void;
+
+    // METHODS
+
+    /**
+     * Returns command parameters as object.
+     */
+    getParams(): object;
+
+  }
+
+  /**
+   * Removes (fills) horizontal dotted lines on document image automatically.
+   */
+  class WebDottedLineRemovalCommandJS extends Vintasoft.Imaging.ImageProcessing.DocCleanup.WebDocumentImageProcessingCommandWithSourceChangeJS {
+
+    // CONTSRUCTORS
+
+    /**
+     * Initializes a new instance of the [see= "WebDottedLineRemovalCommandJS"] class.
+     */
+    constructor();
+
+    // PROPERTIES
+
+    /**
+     * Gets action name.
+     */
+    get_ActionName(): string;
+
+    /**
+     * Gets a color for filling of lines.
+     */
+    get_FillColor(): string;
+
+    /**
+     * Sets a color for filling of lines.
+     * @param value Color for filling of lines. Default value is "rgba(255,255,255,255)".
+     */
+    set_FillColor(value: string): void;
 
     // METHODS
 
