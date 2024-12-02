@@ -91,8 +91,8 @@ export class ImagingDemoComponent {
       thumbnailViewer1.set_CanDeleteThumbnailsUsingKeyboard(true);
 
       // get the thumbnail viewer panel
-      let thumbnailViewerPanel: Vintasoft.Imaging.DocumentViewer.Panels.WebUiThumbnailViewerPanelJS
-        = this._docViewer.get_Items().getItemByRegisteredId("thumbnailViewerPanel") as Vintasoft.Imaging.DocumentViewer.Panels.WebUiThumbnailViewerPanelJS;
+      let thumbnailViewerPanel: Vintasoft.Imaging.UI.Panels.WebUiThumbnailViewerPanelJS
+        = this._docViewer.get_Items().getItemByRegisteredId("thumbnailViewerPanel") as Vintasoft.Imaging.UI.Panels.WebUiThumbnailViewerPanelJS;
       // specify that thumbnail viewer should have context menu that allows to delete thumbnails
       thumbnailViewerPanel.set_CanDeleteThumbnailsUsingContextMenu(true);
 
@@ -135,17 +135,14 @@ export class ImagingDemoComponent {
     // get items of document viewer
     let items: Vintasoft.Imaging.UI.UIElements.WebUiElementCollectionJS = docViewerSettings.get_Items();
 
-    let uploadFileButton: Vintasoft.Imaging.UI.UIElements.WebUiUploadFileButtonJS = items.getItemByRegisteredId("uploadFileButton") as Vintasoft.Imaging.UI.UIElements.WebUiUploadFileButtonJS;
-    if (uploadFileButton != null)
-      uploadFileButton.set_FileExtensionFilter(".bmp, .emf, .gif, .ico, .cur, .jpg, .jpeg, .jls, .pcx, .png, .tif, .tiff, .wmf, .jb2, .jbig2, .jp2, .j2k, .j2c, .jpc, .cr2, .crw, .nef, .nrw, .dng, .dcm, .dic, .acr, .pdf");
 
-    // get the "File" menu panel
-    let fileSubmenu: Vintasoft.Imaging.DocumentViewer.Panels.WebUiVisualToolsToolbarPanelJS = items.getItemByRegisteredId("fileToolbarPanel") as Vintasoft.Imaging.DocumentViewer.Panels.WebUiVisualToolsToolbarPanelJS;
-    // if menu panel is found
-    if (fileSubmenu != null) {
-      let fileSubmenuItems: Vintasoft.Imaging.UI.UIElements.WebUiElementCollectionJS = fileSubmenu.get_Items();
-      fileSubmenuItems.insertItem(3, "documentLayoutSettingsButton");
-    }
+    let uploadAndOpenFileButton: Vintasoft.Imaging.UI.UIElements.WebUiUploadFileButtonJS = items.getItemByRegisteredId("uploadAndOpenFileButton") as Vintasoft.Imaging.UI.UIElements.WebUiUploadFileButtonJS;
+    if (uploadAndOpenFileButton != null)
+      uploadAndOpenFileButton.set_FileExtensionFilter(".bmp, .emf, .gif, .ico, .cur, .jpg, .jpeg, .jls, .pcx, .png, .tif, .tiff, .wmf, .jb2, .jbig2, .jp2, .j2k, .j2c, .jpc, .cr2, .crw, .nef, .nrw, .dng, .dcm, .dic, .acr, .pdf");
+
+    let uploadAndAddFileButton: Vintasoft.Imaging.UI.UIElements.WebUiUploadFileButtonJS = items.getItemByRegisteredId("uploadAndAddFileButton") as Vintasoft.Imaging.UI.UIElements.WebUiUploadFileButtonJS;
+    if (uploadAndAddFileButton != null)
+      uploadAndAddFileButton.set_FileExtensionFilter(".bmp, .emf, .gif, .ico, .cur, .jpg, .jpeg, .jls, .pcx, .png, .tif, .tiff, .wmf, .jb2, .jbig2, .jp2, .j2k, .j2c, .jpc, .cr2, .crw, .nef, .nrw, .dng, .dcm, .dic, .acr, .pdf");
   }
 
   /**
@@ -161,7 +158,7 @@ export class ImagingDemoComponent {
       let sidePanelItems = sidePanel.get_PanelsCollection();
       sidePanelItems.addItem("imageProcessingPanel");
 
-      let processingPanel: Vintasoft.Imaging.DocumentViewer.Panels.WebUiImageProcessingPanelJS = items.getItemByRegisteredId("imageProcessingPanel") as Vintasoft.Imaging.DocumentViewer.Panels.WebUiImageProcessingPanelJS;
+      let processingPanel: Vintasoft.Imaging.UI.Panels.WebUiImageProcessingPanelJS = items.getItemByRegisteredId("imageProcessingPanel") as Vintasoft.Imaging.UI.Panels.WebUiImageProcessingPanelJS;
       if (processingPanel != null) {
         let imageProcessingHelper = new ImageProcessingHelper(this.modalService, this.__unblockUI);
         Vintasoft.Shared.subscribeToEvent(processingPanel, "settingsButtonClicked", imageProcessingHelper.imageProcessingPanel_settingsButtonClicked);
@@ -187,8 +184,8 @@ export class ImagingDemoComponent {
     let items: Vintasoft.Imaging.UI.UIElements.WebUiElementCollectionJS = docViewerSettings.get_Items();
 
     // get the image viewer panel
-    let imageViewerPanel: Vintasoft.Imaging.DocumentViewer.Panels.WebUiImageViewerPanelJS =
-      items.getItemByRegisteredId("imageViewerPanel") as Vintasoft.Imaging.DocumentViewer.Panels.WebUiImageViewerPanelJS;
+    let imageViewerPanel: Vintasoft.Imaging.UI.Panels.WebUiImageViewerPanelJS =
+      items.getItemByRegisteredId("imageViewerPanel") as Vintasoft.Imaging.UI.Panels.WebUiImageViewerPanelJS;
     // if panel exists
     if (imageViewerPanel != null) {
       // enable ability to set custom image rotation

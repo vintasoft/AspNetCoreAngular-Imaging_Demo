@@ -21,12 +21,6 @@ import { BlockUiDialog, BlockUiDialogContent } from './dialogs/block-ui-dialog';
     BlockUiDialog,
     BlockUiDialogContent
   ],
-  entryComponents: [
-    ErrorMessageDialogContent,
-    ErrorMessageDialog,
-    BlockUiDialog,
-    BlockUiDialogContent
-  ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
