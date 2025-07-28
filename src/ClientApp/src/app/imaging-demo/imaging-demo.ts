@@ -112,8 +112,8 @@ export class ImagingDemoComponent {
       // subscribe to the focusedIndexChanged event of image viewer
       Vintasoft.Shared.subscribeToEvent(imageViewer1, "focusedIndexChanged", this.__imageViewer_focusedIndexChanged);
 
-      // get the visual tool, which allows to pan images in image viewer
-      let panTool: Vintasoft.Imaging.UI.VisualTools.WebPanToolJS = this._docViewer.getVisualToolById("PanTool");
+      // get the visual tool, which allows to pan and zoom images in image viewer
+      let panTool: Vintasoft.Imaging.UI.VisualTools.WebPanToolJS = this._docViewer.getVisualToolById("PanTool,ZoomTool");
       // set the visual tool as active visual tool in image viewer
       this._docViewer.set_CurrentVisualTool(panTool);
 
