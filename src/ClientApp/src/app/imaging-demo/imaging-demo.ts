@@ -49,8 +49,12 @@ export class ImagingDemoComponent {
       Vintasoft.Shared.WebServiceJS.defaultImageProcessingService = new Vintasoft.Shared.WebServiceControllerJS("vintasoft/api/MyVintasoftImageProcessingApi");
       Vintasoft.Shared.WebServiceJS.defaultImageProcessingDocCleanupService = new Vintasoft.Shared.WebServiceControllerJS("vintasoft/api/MyVintasoftImageProcessingDocCleanupApi");
 
+      // register new UI elements
+      this.__registerNewUiElements();
+
       // create the document viewer settings
-      let docViewerSettings: Vintasoft.Imaging.DocumentViewer.WebDocumentViewerSettingsJS = new Vintasoft.Imaging.DocumentViewer.WebDocumentViewerSettingsJS("documentViewerContainer", "documentViewer");
+      let docViewerSettings: Vintasoft.Imaging.DocumentViewer.WebDocumentViewerSettingsJS =
+        new Vintasoft.Imaging.DocumentViewer.WebDocumentViewerSettingsJS("documentViewerContainer", "documentViewer");
       // enable image uploading from URL
       docViewerSettings.set_CanUploadImageFromUrl(true);
       // specify that document viewer should show "Export and download file" button instead of "Download file" button
@@ -112,8 +116,20 @@ export class ImagingDemoComponent {
       // subscribe to the focusedIndexChanged event of image viewer
       Vintasoft.Shared.subscribeToEvent(imageViewer1, "focusedIndexChanged", this.__imageViewer_focusedIndexChanged);
 
+      // names of visual tools in composite visual tool
+      let visualToolNames: string = "PanTool";
+      // if touch device is used
+      if (this.__isTouchDevice()) {
+          // get zoom tool from document viewer
+          let zoomTool: Vintasoft.Imaging.UI.VisualTools.WebVisualToolJS = this._docViewer.getVisualToolById('ZoomTool');
+          // specify that zoom tool should not disable context menu
+          zoomTool.set_DisableContextMenu(false);
+
+          // add name of zoom tool to the names of visual tools of composite visual tool
+          visualToolNames = visualToolNames + ",ZoomTool";
+      }
       // get the visual tool, which allows to pan and zoom images in image viewer
-      let panTool: Vintasoft.Imaging.UI.VisualTools.WebPanToolJS = this._docViewer.getVisualToolById("PanTool,ZoomTool");
+      let panTool: Vintasoft.Imaging.UI.VisualTools.WebPanToolJS = this._docViewer.getVisualToolById(visualToolNames);
       // set the visual tool as active visual tool in image viewer
       this._docViewer.set_CurrentVisualTool(panTool);
 
@@ -125,7 +141,40 @@ export class ImagingDemoComponent {
 
 
 
+  // === "Tools" toolbar ===
+
+  /**
+   * Creates UI button for activating the visual tool, which allows to pan images in image viewer.
+   */
+  __createPanToolButton() {
+    // if touch device is used
+    if (_imagingDemoComponent.__isTouchDevice()) {
+        return new Vintasoft.Imaging.UI.UIElements.WebUiVisualToolButtonJS({
+            cssClass: "vsdv-tools-panButton",
+            title: "Pan, Zoom",
+            localizationId: "panToolButton"
+        }, "PanTool,ZoomTool");
+    }
+    else {
+        return new Vintasoft.Imaging.UI.UIElements.WebUiVisualToolButtonJS({
+            cssClass: "vsdv-tools-panButton",
+            title: "Pan",
+            localizationId: "panToolButton"
+        }, "PanTool");
+    }
+  }
+
+
+
   // === Init UI ===
+
+  /**
+   Registers custom UI elements in "WebUiElementsFactoryJS".
+  */
+  __registerNewUiElements() {
+      // register the "Pan" button in web UI elements factory
+      Vintasoft.Imaging.UI.UIElements.WebUiElementsFactoryJS.registerElement("panToolButton", _imagingDemoComponent.__createPanToolButton);
+  }
 
   /**
    * Initializes main menu of document viewer.
@@ -354,6 +403,13 @@ export class ImagingDemoComponent {
     let dlg: ErrorMessageDialog = new ErrorMessageDialog(_imagingDemoComponent.modalService);
     dlg.errorData = data;
     dlg.open();
+  }
+
+  /**
+   Returns a value indicating whether touch device is used.
+  */
+  __isTouchDevice() {
+      return navigator.maxTouchPoints > 0;
   }
 
 }
