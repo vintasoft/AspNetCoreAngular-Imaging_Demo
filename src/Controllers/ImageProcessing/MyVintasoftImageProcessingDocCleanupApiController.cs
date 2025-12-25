@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Hosting;
-
-using Vintasoft.Imaging.ImageProcessing.DocCleanup.AspNetCore.ApiControllers;
+﻿using Vintasoft.Imaging.ImageProcessing.DocCleanup.AspNetCore.ApiControllers;
 
 namespace AspNetCoreAngularImagingDemo.Controllers
 {

@@ -9,9 +9,14 @@ export class ImageProcessingHelper {
 
   _unblockUiFunc: Function;
 
-  // A value indicating whether visual tool selection is used.
+  // a value indicating whether visual tool selection is used
   _isVisualToolSelectionUsed = false;
+
+  // the dialog that allows to view and change the settings of image processing command
   _imageProcessingCommandSettingsDialog: Vintasoft.Imaging.UI.Dialogs.WebUiPropertyGridDialogJS | null = null;
+
+  // a value indicating whether the image processing command settings dialog was shown
+  _isImageProcessingCommandSettingsDialogShown = false;
 
 
 
@@ -28,7 +33,7 @@ export class ImageProcessingHelper {
    * @param event Event.
    * @param command Selected image processing command.
    */
-  imageProcessingPanel_settingsButtonClicked(event: any, command: any) {
+  imageProcessingPanel_settingsButtonClicked(event: any, command: Vintasoft.Imaging.ImageProcessing.WebImageProcessingCommandWithSourceChangeJS) {
     if (command != null) {
       let uiElement: Vintasoft.Imaging.UI.UIElements.WebUiElementJS = event.target;
       let docViewer: Vintasoft.Imaging.DocumentViewer.WebDocumentViewerJS = uiElement.get_RootControl() as Vintasoft.Imaging.DocumentViewer.WebDocumentViewerJS;
@@ -57,6 +62,16 @@ export class ImageProcessingHelper {
         }
       }
 
+      // if the image processing settings dialog was not shown earlier
+      if (!this._isImageProcessingCommandSettingsDialogShown) {
+        // get a value indicating whether the undo manager is enabled in image viewer
+        var isUndoManagerEnabled = imageViewer.get_UndoManager().get_IsEnabled();
+        // if undo manager is enabled
+        if (isUndoManagerEnabled)
+          // specify that the image processing command should not change the source image file
+          command.set_ChangeSource(false);
+      }
+
       // if previous image processing dialog exists
       if (this._imageProcessingCommandSettingsDialog != null) {
         // remove dialog from web document viewer
@@ -79,6 +94,9 @@ export class ImageProcessingHelper {
       // add dialog to the web document viewer
       docViewer.get_Items().addItem(this._imageProcessingCommandSettingsDialog);
 
+      // remember that the image processing settings dialog was shown
+      this._isImageProcessingCommandSettingsDialogShown = true;
+
       // show the dialog
       this._imageProcessingCommandSettingsDialog.show();
     }
@@ -89,13 +107,23 @@ export class ImageProcessingHelper {
    * @param event Event.
    * @param command Selected image processing command.
    */
-  imageProcessingPanel_processingStarting(event: any, command: Vintasoft.Imaging.ImageProcessing.WebImageProcessingCommandBaseJS) {
+  imageProcessingPanel_processingStarting(event: any, command: Vintasoft.Imaging.ImageProcessing.WebImageProcessingCommandWithSourceChangeJS) {
     if (command == null)
       return;
 
     let uiElement: Vintasoft.Imaging.UI.UIElements.WebUiElementJS = event.target;
     let docViewer: Vintasoft.Imaging.DocumentViewer.WebDocumentViewerJS = uiElement.get_RootControl() as Vintasoft.Imaging.DocumentViewer.WebDocumentViewerJS;
     let imageViewer: Vintasoft.Imaging.UI.WebImageViewerJS = docViewer.get_ImageViewer();
+
+    // if the image processing settings dialog was not shown earlier
+    if (!this._isImageProcessingCommandSettingsDialogShown) {
+      // get a value indicating whether the undo manager is enabled in image viewer
+      var isUndoManagerEnabled = imageViewer.get_UndoManager().get_IsEnabled();
+      // if undo manager is enabled
+      if (isUndoManagerEnabled)
+        // specify that the image processing command should not change the source image file
+        command.set_ChangeSource(false);
+    }
 
     // get visual tool
     let visualTool: Vintasoft.Imaging.UI.VisualTools.WebVisualToolJS = imageViewer.get_VisualTool();

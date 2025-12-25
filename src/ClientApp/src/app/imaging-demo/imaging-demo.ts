@@ -61,7 +61,13 @@ export class ImagingDemoComponent {
       docViewerSettings.set_CanExportAndDownloadFile(true);
       docViewerSettings.set_CanDownloadFile(false);
       docViewerSettings.set_CanAddFile(true);
+      // specify that document viewer can clear session cache
       docViewerSettings.set_CanClearSessionCache(true);
+      // if application is executing on desktop (not a mobile device)
+      if (!this.__isMobileDevice()) {
+        // specify that undo-redo panel should show the undo action list
+        docViewerSettings.set_ShowUndoActionList(true);
+      }
 
       // initialize main menu of document viewer
       this.__initMenu(docViewerSettings);
@@ -107,6 +113,9 @@ export class ImagingDemoComponent {
       // specify that image viewer must show images in the fit width mode
       imageViewer1.set_ImageSizeMode(new Vintasoft.Imaging.WebImageSizeModeEnumJS("FitToWidth"));
 
+      // specify that image viewer should save information about processed images
+      imageViewer1.get_UndoManager().set_IsEnabled(true);
+
       // create the progress image
       let progressImage = new Image();
       progressImage.src = "Images/fileUploadProgress.gif";
@@ -120,13 +129,13 @@ export class ImagingDemoComponent {
       let visualToolNames: string = "PanTool";
       // if touch device is used
       if (this.__isTouchDevice()) {
-          // get zoom tool from document viewer
-          let zoomTool: Vintasoft.Imaging.UI.VisualTools.WebVisualToolJS = this._docViewer.getVisualToolById('ZoomTool');
-          // specify that zoom tool should not disable context menu
-          zoomTool.set_DisableContextMenu(false);
+        // get zoom tool from document viewer
+        let zoomTool: Vintasoft.Imaging.UI.VisualTools.WebVisualToolJS = this._docViewer.getVisualToolById('ZoomTool');
+        // specify that zoom tool should not disable context menu
+        zoomTool.set_DisableContextMenu(false);
 
-          // add name of zoom tool to the names of visual tools of composite visual tool
-          visualToolNames = visualToolNames + ",ZoomTool";
+        // add name of zoom tool to the names of visual tools of composite visual tool
+        visualToolNames = visualToolNames + ",ZoomTool";
       }
       // get the visual tool, which allows to pan and zoom images in image viewer
       let panTool: Vintasoft.Imaging.UI.VisualTools.WebPanToolJS = this._docViewer.getVisualToolById(visualToolNames);
@@ -149,18 +158,18 @@ export class ImagingDemoComponent {
   __createPanToolButton() {
     // if touch device is used
     if (_imagingDemoComponent.__isTouchDevice()) {
-        return new Vintasoft.Imaging.UI.UIElements.WebUiVisualToolButtonJS({
-            cssClass: "vsdv-tools-panButton",
-            title: "Pan, Zoom",
-            localizationId: "panToolButton"
-        }, "PanTool,ZoomTool");
+      return new Vintasoft.Imaging.UI.UIElements.WebUiVisualToolButtonJS({
+        cssClass: "vsdv-tools-panButton",
+        title: "Pan, Zoom",
+        localizationId: "panToolButton"
+      }, "PanTool,ZoomTool");
     }
     else {
-        return new Vintasoft.Imaging.UI.UIElements.WebUiVisualToolButtonJS({
-            cssClass: "vsdv-tools-panButton",
-            title: "Pan",
-            localizationId: "panToolButton"
-        }, "PanTool");
+      return new Vintasoft.Imaging.UI.UIElements.WebUiVisualToolButtonJS({
+        cssClass: "vsdv-tools-panButton",
+        title: "Pan",
+        localizationId: "panToolButton"
+      }, "PanTool");
     }
   }
 
@@ -172,8 +181,8 @@ export class ImagingDemoComponent {
    Registers custom UI elements in "WebUiElementsFactoryJS".
   */
   __registerNewUiElements() {
-      // register the "Pan" button in web UI elements factory
-      Vintasoft.Imaging.UI.UIElements.WebUiElementsFactoryJS.registerElement("panToolButton", _imagingDemoComponent.__createPanToolButton);
+    // register the "Pan" button in web UI elements factory
+    Vintasoft.Imaging.UI.UIElements.WebUiElementsFactoryJS.registerElement("panToolButton", _imagingDemoComponent.__createPanToolButton);
   }
 
   /**
@@ -184,7 +193,6 @@ export class ImagingDemoComponent {
     // get items of document viewer
     let items: Vintasoft.Imaging.UI.UIElements.WebUiElementCollectionJS = docViewerSettings.get_Items();
 
-
     let uploadAndOpenFileButton: Vintasoft.Imaging.UI.UIElements.WebUiUploadFileButtonJS = items.getItemByRegisteredId("uploadAndOpenFileButton") as Vintasoft.Imaging.UI.UIElements.WebUiUploadFileButtonJS;
     if (uploadAndOpenFileButton != null)
       uploadAndOpenFileButton.set_FileExtensionFilter(".bmp, .emf, .gif, .ico, .cur, .jpg, .jpeg, .jls, .pcx, .png, .tif, .tiff, .svg, .wmf, .jb2, .jbig2, .jp2, .j2k, .j2c, .jpc, .cr2, .crw, .nef, .nrw, .dng, .dcm, .dic, .acr, .pdf");
@@ -192,6 +200,28 @@ export class ImagingDemoComponent {
     let uploadAndAddFileButton: Vintasoft.Imaging.UI.UIElements.WebUiUploadFileButtonJS = items.getItemByRegisteredId("uploadAndAddFileButton") as Vintasoft.Imaging.UI.UIElements.WebUiUploadFileButtonJS;
     if (uploadAndAddFileButton != null)
       uploadAndAddFileButton.set_FileExtensionFilter(".bmp, .emf, .gif, .ico, .cur, .jpg, .jpeg, .jls, .pcx, .png, .tif, .tiff, .svg, .wmf, .jb2, .jbig2, .jp2, .j2k, .j2c, .jpc, .cr2, .crw, .nef, .nrw, .dng, .dcm, .dic, .acr, .pdf");
+
+    // get the main menu of document viewer
+    let mainMenu: Vintasoft.Imaging.UI.Panels.WebUiPanelContainerJS = items.getItemByRegisteredId("mainMenu") as Vintasoft.Imaging.UI.Panels.WebUiPanelContainerJS;
+    // if main menu is found
+    if (mainMenu != null) {
+      // get items of main menu
+      let mainMenuItems: Vintasoft.Imaging.UI.UIElements.WebUiElementCollectionJS = mainMenu.get_Items();
+
+      // add new item to the main menu
+      mainMenuItems.addItem("imageProcessingAndUndoRedoToolbarPanel");
+
+      let imageProcessingAndUndoRedoToolbarPanel: Vintasoft.Imaging.UI.Panels.WebUiPanelJS =
+        items.getItemByRegisteredId("imageProcessingAndUndoRedoToolbarPanel") as Vintasoft.Imaging.UI.Panels.WebUiPanelJS;
+      if (imageProcessingAndUndoRedoToolbarPanel != null) {
+        var imageProcessingPanel = imageProcessingAndUndoRedoToolbarPanel.get_Items().getItem(0);
+        let imageProcessingHelper = new ImageProcessingHelper(this.modalService, this.__unblockUI);
+
+        Vintasoft.Shared.subscribeToEvent(imageProcessingPanel, "settingsButtonClicked", imageProcessingHelper.imageProcessingPanel_settingsButtonClicked);
+        Vintasoft.Shared.subscribeToEvent(imageProcessingPanel, "processingStarting", imageProcessingHelper.imageProcessingPanel_processingStarting);
+        Vintasoft.Shared.subscribeToEvent(imageProcessingPanel, "processingFinished", imageProcessingHelper.imageProcessingPanel_processingFinished);
+      }
+    }
   }
 
   /**
@@ -201,20 +231,6 @@ export class ImagingDemoComponent {
   __initSidePanel(docViewerSettings: Vintasoft.Imaging.DocumentViewer.WebDocumentViewerSettingsJS) {
     // get items of document viewer
     let items: Vintasoft.Imaging.UI.UIElements.WebUiElementCollectionJS = docViewerSettings.get_Items();
-
-    let sidePanel: Vintasoft.Imaging.UI.Panels.WebUiSidePanelJS = items.getItemByRegisteredId("sidePanel") as Vintasoft.Imaging.UI.Panels.WebUiSidePanelJS;
-    if (sidePanel != null) {
-      let sidePanelItems = sidePanel.get_PanelsCollection();
-      sidePanelItems.addItem("imageProcessingPanel");
-
-      let processingPanel: Vintasoft.Imaging.UI.Panels.WebUiImageProcessingPanelJS = items.getItemByRegisteredId("imageProcessingPanel") as Vintasoft.Imaging.UI.Panels.WebUiImageProcessingPanelJS;
-      if (processingPanel != null) {
-        let imageProcessingHelper = new ImageProcessingHelper(this.modalService, this.__unblockUI);
-        Vintasoft.Shared.subscribeToEvent(processingPanel, "settingsButtonClicked", imageProcessingHelper.imageProcessingPanel_settingsButtonClicked);
-        Vintasoft.Shared.subscribeToEvent(processingPanel, "processingStarting", imageProcessingHelper.imageProcessingPanel_processingStarting);
-        Vintasoft.Shared.subscribeToEvent(processingPanel, "processingFinished", imageProcessingHelper.imageProcessingPanel_processingFinished);
-      }
-    }
 
     // get the thumbnail viewer panel of document viewer
     var thumbnailViewerPanel = items.getItemByRegisteredId("thumbnailViewerPanel");
@@ -409,7 +425,26 @@ export class ImagingDemoComponent {
    Returns a value indicating whether touch device is used.
   */
   __isTouchDevice() {
-      return navigator.maxTouchPoints > 0;
+    return navigator.maxTouchPoints > 0;
+  }
+
+  /**
+   Returns a value indicating whether application is executing on mobile device.
+  */
+  __isMobileDevice() {
+    const toMatch = [
+      /Android/i,
+      /webOS/i,
+      /iPhone/i,
+      /iPad/i,
+      /iPod/i,
+      /BlackBerry/i,
+      /Windows Phone/i
+    ];
+
+    return toMatch.some((toMatchItem) => {
+      return navigator.userAgent.match(toMatchItem);
+    });
   }
 
 }
