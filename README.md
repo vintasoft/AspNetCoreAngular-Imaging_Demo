@@ -1,4 +1,4 @@
-# VintaSoft ASP.NET Core Angular Imaging Demo
+﻿# VintaSoft ASP.NET Core Angular Imaging Demo
 
 This ASP.NET Core with Angular project uses <a href="https://www.vintasoft.com/vsimaging-dotnet-index.html">VintaSoft Imaging .NET SDK</a>.
 The client-side of project is written on Angular (TypeScript+HTML+CSS). The server-side of project uses ASP.NET Core API controllers.<br />
@@ -25,9 +25,9 @@ The project demonstrates how to view and process images in ASP.NET Core with Ang
    Vintasoft.Imaging.ImagingGlobalSettings.Register("REG_USER", "REG_EMAIL", "EXPIRATION_DATE", "REG_CODE");
    ```
 
-3. Build the project ("AspNetCoreAngularImagingDemo.Net8.csproj" file) in Visual Studio or using .NET CLI:
+3. Build the project ("AspNetCoreAngularImagingDemo.Net10.csproj" file) in Visual Studio or using .NET CLI:
    ```
-   dotnet build AspNetCoreAngularImagingDemo.Net8.csproj
+   dotnet build AspNetCoreAngularImagingDemo.Net10.csproj
    ```
 
 4. Run compiled application and try to view and annotate images and documents.
