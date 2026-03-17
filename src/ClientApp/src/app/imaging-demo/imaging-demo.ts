@@ -150,39 +150,12 @@ export class ImagingDemoComponent {
 
 
 
-  // === "Tools" toolbar ===
-
-  /**
-   * Creates UI button for activating the visual tool, which allows to pan images in image viewer.
-   */
-  __createPanToolButton() {
-    // if touch device is used
-    if (_imagingDemoComponent.__isTouchDevice()) {
-      return new Vintasoft.Imaging.UI.UIElements.WebUiVisualToolButtonJS({
-        cssClass: "vsdv-tools-panButton",
-        title: "Pan, Zoom",
-        localizationId: "panToolButton"
-      }, "PanTool,ZoomTool");
-    }
-    else {
-      return new Vintasoft.Imaging.UI.UIElements.WebUiVisualToolButtonJS({
-        cssClass: "vsdv-tools-panButton",
-        title: "Pan",
-        localizationId: "panToolButton"
-      }, "PanTool");
-    }
-  }
-
-
-
   // === Init UI ===
 
   /**
    Registers custom UI elements in "WebUiElementsFactoryJS".
   */
   __registerNewUiElements() {
-    // register the "Pan" button in web UI elements factory
-    Vintasoft.Imaging.UI.UIElements.WebUiElementsFactoryJS.registerElement("panToolButton", _imagingDemoComponent.__createPanToolButton);
   }
 
   /**
