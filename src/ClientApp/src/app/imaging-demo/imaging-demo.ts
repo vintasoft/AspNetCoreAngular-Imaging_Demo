@@ -168,11 +168,11 @@ export class ImagingDemoComponent {
 
     let uploadAndOpenFileButton: Vintasoft.Imaging.UI.UIElements.WebUiUploadFileButtonJS = items.getItemByRegisteredId("uploadAndOpenFileButton") as Vintasoft.Imaging.UI.UIElements.WebUiUploadFileButtonJS;
     if (uploadAndOpenFileButton != null)
-      uploadAndOpenFileButton.set_FileExtensionFilter(".bmp, .emf, .gif, .ico, .cur, .jpg, .jpeg, .jls, .pcx, .png, .tif, .tiff, .svg, .wmf, .jb2, .jbig2, .jp2, .j2k, .j2c, .jpc, .cr2, .crw, .nef, .nrw, .dng, .dcm, .dic, .acr, .pdf");
+      uploadAndOpenFileButton.set_FileExtensionFilter(".bmp, .emf, .gif, .ico, .cur, .jpg, .jpeg, .jls, .pcx, .png, .tif, .tiff, .svg, .wmf, .jb2, .jbig2, .jp2, .j2k, .j2c, .jpc, .cr2, .crw, .nef, .nrw, .dng, .dcm, .dic, .acr, .pdf, .dxf, .dwg");
 
     let uploadAndAddFileButton: Vintasoft.Imaging.UI.UIElements.WebUiUploadFileButtonJS = items.getItemByRegisteredId("uploadAndAddFileButton") as Vintasoft.Imaging.UI.UIElements.WebUiUploadFileButtonJS;
     if (uploadAndAddFileButton != null)
-      uploadAndAddFileButton.set_FileExtensionFilter(".bmp, .emf, .gif, .ico, .cur, .jpg, .jpeg, .jls, .pcx, .png, .tif, .tiff, .svg, .wmf, .jb2, .jbig2, .jp2, .j2k, .j2c, .jpc, .cr2, .crw, .nef, .nrw, .dng, .dcm, .dic, .acr, .pdf");
+      uploadAndAddFileButton.set_FileExtensionFilter(".bmp, .emf, .gif, .ico, .cur, .jpg, .jpeg, .jls, .pcx, .png, .tif, .tiff, .svg, .wmf, .jb2, .jbig2, .jp2, .j2k, .j2c, .jpc, .cr2, .crw, .nef, .nrw, .dng, .dcm, .dic, .acr, .pdf, .dxf, .dwg");
 
     // get the main menu of document viewer
     let mainMenu: Vintasoft.Imaging.UI.Panels.WebUiPanelContainerJS = items.getItemByRegisteredId("mainMenu") as Vintasoft.Imaging.UI.Panels.WebUiPanelContainerJS;

@@ -67,9 +67,13 @@ export class ImageProcessingHelper {
         // get a value indicating whether the undo manager is enabled in image viewer
         var isUndoManagerEnabled = imageViewer.get_UndoManager().get_IsEnabled();
         // if undo manager is enabled
-        if (isUndoManagerEnabled)
-          // specify that the image processing command should not change the source image file
-          command.set_ChangeSource(false);
+        if (isUndoManagerEnabled) {
+          // if image processing command can modify image
+          if (command.get_CanModifyImage()) {
+            // specify that the image processing command should not change the source image file
+            command.set_ChangeSource(false);
+          }
+        }
       }
 
       // if previous image processing dialog exists
