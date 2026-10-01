@@ -2350,6 +2350,17 @@ declare module Vintasoft.Imaging.ImageProcessing.DocCleanup {
      */
     set_Segmentation(value: Vintasoft.Imaging.ImageProcessing.DocCleanup.WebDocumentSegmentationCommandJS): void;
 
+    /**
+     * Gets a command that allows to detect tables on image.
+     */
+    get_TableDetection(): Vintasoft.Imaging.ImageProcessing.DocCleanup.WebTableWithBordersDetectionCommandJS;
+
+    /**
+     * Sets a command that allows to detect tables on image.
+     * @param value An instance of [see="WebTableWithBordersDetectionCommandJS"] class. By default command is used.
+     */
+    set_TableDetection(value: Vintasoft.Imaging.ImageProcessing.DocCleanup.WebTableWithBordersDetectionCommandJS): void;
+
     // METHODS
 
     /**
@@ -2412,6 +2423,27 @@ declare module Vintasoft.Imaging.ImageProcessing.DocCleanup {
 
     /**
      * Initializes a new instance of the [see= "WebDocumentPerspectiveCorrectionCommandJS"] class.
+     */
+    constructor();
+
+    // PROPERTIES
+
+    /**
+     * Gets action name.
+     */
+    get_ActionName(): string;
+
+  }
+
+  /**
+   * Detects tables with borders on image.
+   */
+  class WebTableWithBordersDetectionCommandJS extends Vintasoft.Imaging.ImageProcessing.DocCleanup.WebDocumentImageProcessingCommandBaseJS {
+
+    // CONTSRUCTORS
+
+    /**
+     * Initializes a new instance of the [see= "WebTableWithBordersDetectionCommandJS"] class.
      */
     constructor();
 

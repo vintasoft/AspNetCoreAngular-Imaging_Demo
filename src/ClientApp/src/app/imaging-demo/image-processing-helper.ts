@@ -166,9 +166,15 @@ export class ImageProcessingHelper {
       let command: Vintasoft.Imaging.ImageProcessing.WebImageProcessingCommandBaseJS = eventArgs.command;
 
       // if image processing command did not change the image, i.e. image processing command is information command
-      if (data.processedImage == null)
-        // show the image processing results
-        _imageProcessingHelper.__informativeImageProcessingCommand_success(docViewer, data);
+      if (data.processedImage == null) {
+        // show the result of information image processing command
+        _imageProcessingHelper.__showInformativeImageProcessingCommandResult(docViewer, data);
+      }
+
+      // if image processing command result contains regions
+      if (_imageProcessingHelper.__hasRegionsInImageProcessingResult(data)) {
+        _imageProcessingHelper.__highlightInformativeImageProcessingCommandResults(docViewer, data);
+      }
 
       // if image processing command can work with image region
       if ((command instanceof Vintasoft.Imaging.ImageProcessing.WebImageProcessingCommandWithRegionJS) ||
@@ -189,7 +195,7 @@ export class ImageProcessingHelper {
    * @param docViewer The document viewer.
    * @param imageProcessingResult The result of image processing.
    */
-  __informativeImageProcessingCommand_success(docViewer: Vintasoft.Imaging.DocumentViewer.WebDocumentViewerJS, imageProcessingResult: any) {
+  __showInformativeImageProcessingCommandResult(docViewer: Vintasoft.Imaging.DocumentViewer.WebDocumentViewerJS, imageProcessingResult: any) {
     // unblock the UI
     _imageProcessingHelper._unblockUiFunc();
 
@@ -213,54 +219,64 @@ export class ImageProcessingHelper {
         });
     docViewer.get_Items().addItem(dlg);
     dlg.show();
-
-    // get regions, which must be highlighted in image viewer
-    let highlightRegions: any = _imageProcessingHelper.__getHighlightRegionsFromImageProcessingResult(imageProcessingResult);
-    // if regions exist
-    if (highlightRegions != null) {
-      // highlight regions in image viewer
-      _imageProcessingHelper.__highlightInformativeImageProcessingCommandResults(docViewer, highlightRegions.regions, highlightRegions.fillColor)
-    }
   }
 
   /**
-   * Returns regions, which must be highlighted in image viewer.
-   * @param imageProcessingResult The result of image processing.
+   * Returns a value indicating whether the image processing command results contains detected regions.
+   * @param {object} imageProcessingResult The result of applying the command to an image.
+   * @returns {boolean} True - result contains detected regions; False - result does not contain detected regions.
    */
-  __getHighlightRegionsFromImageProcessingResult(imageProcessingResult: any) {
-    let regions: object[] = imageProcessingResult.regions;
-    let halftoneRegions: object[] = imageProcessingResult.halftoneRegions;
-    let documentRegions: object[] = imageProcessingResult.documentRegions;
-    if (regions != null || halftoneRegions != null || documentRegions != null) {
-      let fillColor: string = "rgba(255,255,0,0.3)";
-      let highlightRegions: object[] | null = null;
-      if (documentRegions != null) {
-        highlightRegions = documentRegions;
-        fillColor = "rgba(255,255,0,0.3)";
-      }
-      else if (regions != null) {
-        highlightRegions = regions;
-        fillColor = "rgba(0,255,0,0.3)";
-      }
-      else if (halftoneRegions != null) {
-        highlightRegions = halftoneRegions;
-        fillColor = "rgba(0,0,255,0.3)";
-      }
-      return {
-        regions: highlightRegions,
-        fillColor: fillColor
-      };
-    }
-    return null;
+  __hasRegionsInImageProcessingResult(imageProcessingResult: any) {
+    if (imageProcessingResult.documentRegions != null)
+      return true;
+    if (imageProcessingResult.regions != null)
+      return true;
+    if (imageProcessingResult.halftoneRegions != null)
+      return true;
+    if (imageProcessingResult.tableRegions != null)
+      return true;
+    return false;
   }
 
   /**
    * Highlights regions in image viewer.
    * @param docViewer DocumentViewer.
-   * @param highlightRegions Regions.
-   * @param fillColor Fill color.
+   * @param imageProcessingResult The result of image processing.
    */
-  __highlightInformativeImageProcessingCommandResults(docViewer: Vintasoft.Imaging.DocumentViewer.WebDocumentViewerJS, highlightRegions: object[], fillColor: string) {
+  __highlightInformativeImageProcessingCommandResults(docViewer: Vintasoft.Imaging.DocumentViewer.WebDocumentViewerJS, imageProcessingResult: any) {
+    let fillColor: string = "rgba(255,255,0,0.3)";
+    let highlightRegions: object[] | null = null;
+
+    let documentRegions: object[] = imageProcessingResult.documentRegions;
+    if (documentRegions != null) {
+      highlightRegions = documentRegions;
+      fillColor = "rgba(255,255,0,0.3)";
+    }
+    else {
+      let regions: object[] = imageProcessingResult.regions;
+      if (regions != null) {
+        highlightRegions = regions;
+        fillColor = "rgba(0,255,0,0.3)";
+      }
+      else {
+        let halftoneRegions: object[] = imageProcessingResult.halftoneRegions;
+        if (halftoneRegions != null) {
+          highlightRegions = halftoneRegions;
+          fillColor = "rgba(0,0,255,0.3)";
+        }
+        else {
+          let tableRegions: object[] = imageProcessingResult.tableRegions;
+          if (tableRegions != null) {
+            highlightRegions = tableRegions;
+            fillColor = "rgba(255,255,0,0.3)";
+          }
+        }
+      }
+    }
+    if (highlightRegions == null) {
+      return;
+    }
+
     // get the highlight tool from web document viewer
     let highlightVisualTool: Vintasoft.Imaging.UI.VisualTools.WebHighlightToolJS = docViewer.getVisualToolById("HighlightTool") as Vintasoft.Imaging.UI.VisualTools.WebHighlightToolJS;
     // set the highlight tool as current visual tool of web document viewer
